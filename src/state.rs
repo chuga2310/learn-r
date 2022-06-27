@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use cosmwasm_storage::{bucket, bucket_read, Bucket, ReadonlyBucket};
 use cosmwasm_std::Storage;
 
-static STORE_KEY: &[u8] = b"store";
+static STORE_KEY: &[u8] = b"pen_storage";
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Pen {
