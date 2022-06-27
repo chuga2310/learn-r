@@ -5,11 +5,19 @@
     {
       "type": "object",
       "required": [
-        "get_count"
+        "get_pen"
       ],
       "properties": {
-        "get_count": {
-          "type": "object"
+        "get_pen": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
         }
       },
       "additionalProperties": false

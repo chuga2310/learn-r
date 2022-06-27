@@ -3,10 +3,19 @@
   "title": "InstantiateMsg",
   "type": "object",
   "required": [
-    "count"
+    "amount",
+    "name",
+    "price"
   ],
   "properties": {
-    "count": {
+    "amount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "name": {
+      "type": "string"
+    },
+    "price": {
       "type": "integer",
       "format": "int32"
     }
