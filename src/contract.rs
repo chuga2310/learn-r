@@ -20,10 +20,9 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
-        id: "0".to_string(),
-        name: msg.name,
-        amount: msg.amount,
-        price: msg.price,
+        token_id: msg.name,
+        id: msg.id,
+        owner: msg.owner,
     };
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     let key = pen.id.as_bytes();
@@ -40,66 +39,63 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::AddNew {
+            token_id,
             id,
-            name,
-            amount,
-            price,
-        } => add_new(deps, id, name, amount, price),
-        ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
+            owner,
+        } => mint(deps, token_id, id, owner),
+        // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
 
-pub fn add_new(
+pub fn mint(
     deps: DepsMut,
+    token_id: String,
     id: String,
-    name: String,
-    amount: i32,
-    price: i32,
+    owner: i32,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
+        token_id,
         id,
-        name,
-        amount,
-        price,
+        owner,
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
         // id is already taken
-        return Err(ContractError::IdTaken { id: pen.id });
+        return Err(ContractError::IdTaken { token_id: pen.token_id });
     }
     store(deps.storage).save(key, &pen)?;
     Ok(Response::new()
-        .add_attribute("method", "add_new")
-        .add_attribute("id", pen.id))
+        .add_attribute("method", "mint")
+        .add_attribute("token_id", pen.token_id))
 }
 
-pub fn sell(deps: DepsMut, id: String, amount: i32) -> Result<Response, ContractError> {
-    let key = id.as_bytes();
-    store(deps.storage).update(key, |record| {
-        if let Some(mut record) = record {
-            if amount > record.amount {
-                //The amount of pens left is not enough
-                return Err(ContractError::NotEnoughAmount {});
-            }
-            record.amount -= amount;
-            Ok(record)
-        } else {
-            Err(ContractError::IdNotExists { id: id.clone() })
-        }
-    })?;
+// pub fn sell(deps: DepsMut, id: String, amount: i32) -> Result<Response, ContractError> {
+//     let key = id.as_bytes();
+//     store(deps.storage).update(key, |record| {
+//         if let Some(mut record) = record {
+//             if amount > record.amount {
+//                 //The amount of pens left is not enough
+//                 return Err(ContractError::NotEnoughAmount {});
+//             }
+//             record.amount -= amount;
+//             Ok(record)
+//         } else {
+//             Err(ContractError::IdNotExists { id: id.clone() })
+//         }
+//     })?;
 
-    Ok(Response::new().add_attribute("method", "sell"))
-}
+//     Ok(Response::new().add_attribute("method", "sell"))
+// }
 
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::GetPen { id } => query_pen(deps, id),
+        QueryMsg::GetPen { id } => query_pen(deps, token_id),
     }
 }
 
-fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
+fn query_pen(deps: Deps, token_id: String) -> StdResult<Binary> {
     let key = id.as_bytes();
     let pen = match store_query(deps.storage).may_load(key)? {
         Some(pen) => Some(pen),

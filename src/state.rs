@@ -8,10 +8,9 @@ static STORE_KEY: &[u8] = b"pen_storage";
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Pen {
+    pub token_id: String,
     pub id: String,
-    pub name: String,
-    pub amount: i32,
-    pub price: i32,
+    pub owner: String,
 }
 
 pub fn store(storage: &mut dyn Storage) -> Bucket<Pen> {
