@@ -5,25 +5,22 @@ use crate::state::Pen;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub name: String,
-    pub amount: i32,
-    pub price: i32,
+    pub id: String,
+    pub owner: String,
 }
 
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    AddNew {
+    Mint {
         id: String,
-        name: String,
-        amount: i32,
-        price: i32,
+        owner: String,
     },
-    Sell {
-        id: String,
-        amount: i32,
-    },
+    // Sell {
+    //     id: String,
+    //     amount: i32,
+    // },
 }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]

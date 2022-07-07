@@ -20,7 +20,6 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
-        token_id: msg.name,
         id: msg.id,
         owner: msg.owner,
     };
@@ -38,35 +37,32 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        ExecuteMsg::AddNew {
-            token_id,
+        ExecuteMsg::Mint {
             id,
             owner,
-        } => mint(deps, token_id, id, owner),
+        } => mint(deps, id, owner),
         // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
 
 pub fn mint(
     deps: DepsMut,
-    token_id: String,
     id: String,
-    owner: i32,
+    owner: String,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
-        token_id,
         id,
         owner,
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
         // id is already taken
-        return Err(ContractError::IdTaken { token_id: pen.token_id });
+        return Err(ContractError::IdTaken { id: pen.id });
     }
     store(deps.storage).save(key, &pen)?;
     Ok(Response::new()
-        .add_attribute("method", "mint")
-        .add_attribute("token_id", pen.token_id))
+        .add_attribute("method", "Mint")
+        .add_attribute("id", pen.id))
 }
 
 // pub fn sell(deps: DepsMut, id: String, amount: i32) -> Result<Response, ContractError> {
@@ -91,11 +87,11 @@ pub fn mint(
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::GetPen { id } => query_pen(deps, token_id),
+        QueryMsg::GetPen { id } => query_pen(deps, id),
     }
 }
 
-fn query_pen(deps: Deps, token_id: String) -> StdResult<Binary> {
+fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
     let key = id.as_bytes();
     let pen = match store_query(deps.storage).may_load(key)? {
         Some(pen) => Some(pen),

@@ -2,7 +2,7 @@
     fn works_with_add_new_and_sell() {
         let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
 
-        let msg = ExecuteMsg::AddNew {
+        let msg = ExecuteMsg::mint {
             id: "lily_id".to_string(),
             name: "lily".to_string(),
             amount: 100,

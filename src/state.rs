@@ -8,7 +8,6 @@ static STORE_KEY: &[u8] = b"pen_storage";
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct Pen {
-    pub token_id: String,
     pub id: String,
     pub owner: String,
 }
