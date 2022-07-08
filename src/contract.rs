@@ -1,12 +1,12 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
+use cosmwasm_std::StdError;
 use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use cw2::set_contract_version;
-use cosmwasm_std::StdError;
 
 use crate::error::ContractError;
-use crate::msg::{PenInfoResponse, ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{store, Pen, store_query};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PenInfoResponse, QueryMsg};
+use crate::state::{store, store_query, Pen};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:learn-r";
@@ -37,23 +37,13 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        ExecuteMsg::Mint {
-            id,
-            owner,
-        } => mint(deps, id, owner),
+        ExecuteMsg::Mint { id, owner } => mint(deps, id, owner),
         // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
 
-pub fn mint(
-    deps: DepsMut,
-    id: String,
-    owner: String,
-) -> Result<Response, ContractError> {
-    let pen = Pen {
-        id,
-        owner,
-    };
+pub fn mint(deps: DepsMut, id: String, owner: String) -> Result<Response, ContractError> {
+    let pen = Pen { id, owner };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
         // id is already taken
@@ -82,7 +72,6 @@ pub fn mint(
 
 //     Ok(Response::new().add_attribute("method", "sell"))
 // }
-
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {

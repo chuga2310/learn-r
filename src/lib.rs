@@ -6,20 +6,19 @@ pub mod state;
 #[test]
 fn not_works_with_add_new_id_existed() {
     use cosmwasm_std::{
-        coins, from_binary,
+        coins,
         testing::{mock_dependencies_with_balance, mock_env, mock_info},
     };
-    use msg::{ExecuteMsg, PenInfoResponse, QueryMsg};
+    use msg::{ExecuteMsg};
 
-    use contract::{execute, query};
+    use contract::{execute};
     use error::ContractError;
-    use state::Pen;
     let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
     let pen_id = "1234";
     let owner = "aura1csk4psx5gz0l7c9u65289pwecntpwk9vf0c2xv";
     let msg_asiatic = ExecuteMsg::Mint {
         id: pen_id.to_string(),
-        owner : owner.to_string()
+        owner: owner.to_string(),
     };
     let info = mock_info("creator", &coins(1000, "earth"));
     // we can just call .unwrap() to assert this was a success
@@ -29,7 +28,7 @@ fn not_works_with_add_new_id_existed() {
     let info = mock_info("creator", &coins(1000, "earth"));
     let msg_oriental = ExecuteMsg::Mint {
         id: pen_id.to_string(),
-        owner : owner.to_string()
+        owner: owner.to_string(),
     };
     let err = execute(deps.as_mut(), mock_env(), info, msg_oriental).unwrap_err();
     match err {

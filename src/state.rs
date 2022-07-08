@@ -1,8 +1,8 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 /*  Pen */
-use cosmwasm_storage::{bucket, bucket_read, Bucket, ReadonlyBucket};
 use cosmwasm_std::Storage;
+use cosmwasm_storage::{bucket, bucket_read, Bucket, ReadonlyBucket};
 
 static STORE_KEY: &[u8] = b"pen_storage";
 

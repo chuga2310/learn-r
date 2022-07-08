@@ -5,55 +5,20 @@
     {
       "type": "object",
       "required": [
-        "add_new"
+        "mint"
       ],
       "properties": {
-        "add_new": {
+        "mint": {
           "type": "object",
           "required": [
-            "amount",
             "id",
-            "name",
-            "price"
+            "owner"
           ],
           "properties": {
-            "amount": {
-              "type": "integer",
-              "format": "int32"
-            },
             "id": {
               "type": "string"
             },
-            "name": {
-              "type": "string"
-            },
-            "price": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "required": [
-        "sell"
-      ],
-      "properties": {
-        "sell": {
-          "type": "object",
-          "required": [
-            "amount",
-            "id"
-          ],
-          "properties": {
-            "amount": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "id": {
+            "owner": {
               "type": "string"
             }
           }
