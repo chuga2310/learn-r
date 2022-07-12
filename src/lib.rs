@@ -9,9 +9,9 @@ fn not_works_with_add_new_id_existed() {
         coins,
         testing::{mock_dependencies_with_balance, mock_env, mock_info},
     };
-    use msg::{ExecuteMsg};
+    use msg::ExecuteMsg;
 
-    use contract::{execute};
+    use contract::execute;
     use error::ContractError;
     let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
     let pen_id = "1234";

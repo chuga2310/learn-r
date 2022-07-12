@@ -1,1 +1,0 @@
-cb9725cc8f7a85caafa5d5a31a9796cb7c8d30cd4eff620f325d2e41f1b9e248  ./target/wasm32-unknown-unknown/release/learn_r.wasm
