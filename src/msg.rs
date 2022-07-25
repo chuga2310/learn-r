@@ -7,6 +7,12 @@ use crate::state::Pen;
 pub struct InstantiateMsg {
     pub id: String,
     pub owner: String,
+    pub quality: String,
+    pub level: Number,
+    pub effect: Number,
+    pub resilience:Number,
+    pub number_of_mints: Number,
+    pub durability: Number
 }
 
 
@@ -15,7 +21,13 @@ pub struct InstantiateMsg {
 pub enum ExecuteMsg {
     Mint {
         id: String,
-        owner: String,
+        pub owner: String,
+        pub quality: String,
+        pub level: Number,
+        pub effect: Number,
+        pub resilience:Number,
+        pub number_of_mints: Number,
+        pub durability: Number
     },
     // Sell {
     //     id: String,

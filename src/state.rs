@@ -10,6 +10,12 @@ static STORE_KEY: &[u8] = b"pen_storage";
 pub struct Pen {
     pub id: String,
     pub owner: String,
+    pub quality: String,
+    pub level: Number,
+    pub effect: Number,
+    pub resilience:Number,
+    pub number_of_mints: Number,
+    pub durability: Number
 }
 
 pub fn store(storage: &mut dyn Storage) -> Bucket<Pen> {

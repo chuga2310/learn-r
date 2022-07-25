@@ -22,6 +22,12 @@ pub fn instantiate(
     let pen = Pen {
         id: msg.id,
         owner: msg.owner,
+        quality: msg.quality,
+        level: msg.level,
+        effect: msg.effect,
+        resilience: msg.resilience,
+        number_of_mints: msg.number_of_mints,
+        durability: msg.durability
     };
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     let key = pen.id.as_bytes();
@@ -40,7 +46,13 @@ pub fn execute(
         ExecuteMsg::Mint {
             id,
             owner,
-        } => mint(deps, id, owner),
+            quality,
+            level,
+            effect,
+            resilience,
+            number_of_mints,
+            durability
+        } => mint(deps, id, owner, quality, level, effect, resilience, number_of_mints, durability),
         // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
@@ -53,6 +65,12 @@ pub fn mint(
     let pen = Pen {
         id,
         owner,
+        quality,
+        level,
+        effect,
+        resilience,
+        number_of_mints,
+        durability
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {

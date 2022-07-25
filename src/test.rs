@@ -4,10 +4,22 @@
         
         let pen_id = "1234";
         let owner = "aura1csk4psx5gz0l7c9u65289pwecntpwk9vf0c2xv";
+        let quality = 'uncommon';
+        let level = 2;
+        let effect = 4;
+        let resilience = 4;
+        let number_of_mints = 0;
+        let durability = 100
 
         let msg = ExecuteMsg::Mint {
             id: pen_id.to_string(),
-            owner : owner.to_string()
+            owner : owner.to_string(),
+            quality : quality.to_string(),
+            level : level,
+            effect : effect,
+            resilience : resilience,
+            number_of_mints : number_of_mints,
+            durability : durability
         };
         let info = mock_info("creator", &coins(1000, "earth"));
         // we can just call .unwrap() to assert this was a success
@@ -24,7 +36,12 @@
         .unwrap();
         let pen = Pen {
             id: pen_id.to_string(),
-            owner : owner.to_string()
+            owner : owner.to_string(),
+            level : level,
+            effect : effect,
+            resilience : resilience,
+            number_of_mints : number_of_mints,
+            durability : durability
         };
         let expected = PenInfoResponse {
             pen: Some(pen),
