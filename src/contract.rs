@@ -1,12 +1,12 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
+use cosmwasm_std::StdError;
 use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use cw2::set_contract_version;
-use cosmwasm_std::StdError;
 
 use crate::error::ContractError;
-use crate::msg::{PenInfoResponse, ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{store, Pen, store_query};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PenInfoResponse, QueryMsg};
+use crate::state::{store, store_query, Pen};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:learn-r";
@@ -100,7 +100,6 @@ pub fn mint(
 
 //     Ok(Response::new().add_attribute("method", "sell"))
 // }
-
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {

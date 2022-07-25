@@ -3,21 +3,15 @@
   "title": "InstantiateMsg",
   "type": "object",
   "required": [
-    "amount",
-    "name",
-    "price"
+    "id",
+    "owner"
   ],
   "properties": {
-    "amount": {
-      "type": "integer",
-      "format": "int32"
-    },
-    "name": {
+    "id": {
       "type": "string"
     },
-    "price": {
-      "type": "integer",
-      "format": "int32"
+    "owner": {
+      "type": "string"
     }
   }
 }
