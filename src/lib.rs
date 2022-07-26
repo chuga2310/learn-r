@@ -66,10 +66,8 @@ fn not_works_with_add_new_id_existed() {
 /* Only run when test url metadata */
 // #[test]
 // fn works_with_add_new_and_sell() {
-//     use crate::contract::{metadata, query};
-
-//     use cosmwasm_std::from_binary;
-//     use schemars::_serde_json::from_str;
+//     use crate::contract::query;
+//     use cosmwasm_std::{from_binary, to_binary};
 
 //     use contract::execute;
 //     use cosmwasm_std::{
@@ -77,8 +75,8 @@ fn not_works_with_add_new_id_existed() {
 //         testing::{mock_dependencies_with_balance, mock_env, mock_info},
 //     };
 //     use msg::ExecuteMsg;
-//     use msg::{MetadataMsg, PenInfoResponse};
-//     use state::{ExtensionPen, Pen};
+//     use msg::{MetadataPenResponse, QueryMsg};
+//     use state::ExtensionPen;
 //     let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
 
 //     let pen_id = "1234";
@@ -107,14 +105,16 @@ fn not_works_with_add_new_id_existed() {
 //     let res = execute(deps.as_mut(), mock_env(), info, msg).unwrap();
 //     assert_eq!(0, res.messages.len());
 //     // it worked, let's query the pen
-//     let res = metadata(
+//     let res = query(
 //         deps.as_ref(),
 //         mock_env(),
-//         MetadataMsg::GetMetadata {
+//         QueryMsg::GetMetadata {
 //             id: pen_id.to_string(),
 //         },
 //     )
 //     .unwrap();
-//     println!("URL: {res}");
+
+//     let url: String = from_binary(&res).unwrap();
+//     println!("URL: {url}");
 //     assert_eq!(false, true);
 // }

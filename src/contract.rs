@@ -5,7 +5,7 @@ use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response,
 use cw2::set_contract_version;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MetadataMsg, PenInfoResponse, QueryMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PenInfoResponse, QueryMsg};
 use crate::state::{store, store_query, ExtensionPen, Pen};
 
 // version info for migration info
@@ -91,15 +91,14 @@ pub fn mint(
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::GetPen { id } => query_pen(deps, id),
+        QueryMsg::GetMetadata { id } => get_metadata(deps, _env, id),
     }
 }
 
-#[cfg_attr(not(feature = "library"), entry_point)]
-pub fn metadata(deps: Deps, _env: Env, msg: MetadataMsg) -> StdResult<String> {
-    match msg {
-        MetadataMsg::GetMetadata { id } => get_metadata(deps, _env, id),
-    }
-}
+// #[cfg_attr(not(feature = "library"), entry_point)]
+// pub fn query2(deps: Deps, _env: Env, msg: MetadataMsg) -> StdResult<String> {
+//     match msg {}
+// }
 
 fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
     let key = id.as_bytes();
@@ -112,7 +111,7 @@ fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
     to_binary(&resp)
 }
 
-fn get_metadata(deps: Deps, _env: Env, id: String) -> StdResult<String> {
+fn get_metadata(deps: Deps, _env: Env, id: String) -> StdResult<Binary> {
     let key = id.as_bytes();
     let pen = match store_query(deps.storage).may_load(key)? {
         Some(pen) => Some(pen),
@@ -124,5 +123,6 @@ fn get_metadata(deps: Deps, _env: Env, id: String) -> StdResult<String> {
     url.push_str(&contract);
     url.push_str("/token/");
     url.push_str(&pen.unwrap().id.to_string());
-    return Ok(url);
+
+    to_binary(&url)
 }

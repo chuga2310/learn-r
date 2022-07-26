@@ -27,9 +27,6 @@ pub enum ExecuteMsg {
 pub enum QueryMsg {
     // GetPen returns the pen's information
     GetPen { id: String },
-}
-
-pub enum MetadataMsg {
     GetMetadata { id: String },
 }
 
@@ -41,7 +38,7 @@ pub struct PenInfoResponse {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
 pub struct MetadataPenResponse {
-    pub url: String,
+    pub url: Option<String>,
 }
 
 // We define a custom struct for each query response
