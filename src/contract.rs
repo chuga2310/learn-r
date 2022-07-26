@@ -61,6 +61,12 @@ pub fn mint(
     deps: DepsMut,
     id: String,
     owner: String,
+    quality: String, 
+    level:i32,
+    effect:i32, 
+    resilience:i32, 
+    number_of_mints:i32,
+    durability:i32
 ) -> Result<Response, ContractError> {
     let pen = Pen {
         id,

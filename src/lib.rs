@@ -16,9 +16,23 @@ fn not_works_with_add_new_id_existed() {
     let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
     let pen_id = "1234";
     let owner = "aura1csk4psx5gz0l7c9u65289pwecntpwk9vf0c2xv";
+    let quality = "uncommon";
+    let level : i32 = 2;
+    let effect : i32 = 5;
+    let resilience : i32 = 6;
+    let number_of_mints : i32 = 7;
+    let durability: i32 = 7;
+
+
     let msg_asiatic = ExecuteMsg::Mint {
         id: pen_id.to_string(),
         owner: owner.to_string(),
+        quality: quality.to_string(),
+        level: level,
+        effect: effect,
+        resilience:resilience,
+        number_of_mints: number_of_mints,
+        durability: durability
     };
     let info = mock_info("creator", &coins(1000, "earth"));
     // we can just call .unwrap() to assert this was a success
@@ -29,6 +43,12 @@ fn not_works_with_add_new_id_existed() {
     let msg_oriental = ExecuteMsg::Mint {
         id: pen_id.to_string(),
         owner: owner.to_string(),
+        quality: quality.to_string(),
+        level: level,
+        effect: effect,
+        resilience:resilience,
+        number_of_mints: number_of_mints,
+        durability: durability
     };
     let err = execute(deps.as_mut(), mock_env(), info, msg_oriental).unwrap_err();
     match err {
