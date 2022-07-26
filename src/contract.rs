@@ -3,12 +3,9 @@ use cosmwasm_std::entry_point;
 use cosmwasm_std::StdError;
 use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use cw2::set_contract_version;
-use schemars::_serde_json::to_string;
 
 use crate::error::ContractError;
-use crate::msg::{
-    ExecuteMsg, InstantiateMsg, MetadataMsg, MetadataPenResponse, PenInfoResponse, QueryMsg,
-};
+use crate::msg::{ExecuteMsg, InstantiateMsg, MetadataMsg, PenInfoResponse, QueryMsg};
 use crate::state::{store, store_query, ExtensionPen, Pen};
 
 // version info for migration info

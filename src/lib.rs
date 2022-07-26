@@ -1,5 +1,3 @@
-use crate::contract::{metadata, query};
-
 pub mod contract;
 mod error;
 pub mod msg;
@@ -68,6 +66,8 @@ fn not_works_with_add_new_id_existed() {
 /* Only run when test url metadata */
 // #[test]
 // fn works_with_add_new_and_sell() {
+//     use crate::contract::{metadata, query};
+
 //     use cosmwasm_std::from_binary;
 //     use schemars::_serde_json::from_str;
 
