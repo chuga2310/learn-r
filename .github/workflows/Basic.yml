@@ -12,14 +12,6 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
-
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: 1.51.0
-          target: wasm32-unknown-unknown
-          override: true
           
       - uses: actions/checkout@v2
       - name: Install latest nightly
@@ -29,6 +21,15 @@ jobs:
             override: true
             components: rustfmt, clippy
 
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: wasm32-unknown-unknown
+          override: true
+          
       - name: Run unit tests
         uses: actions-rs/cargo@v1
         with:
