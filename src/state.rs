@@ -13,9 +13,9 @@ pub struct Pen {
     pub quality: String,
     pub level: i32,
     pub effect: i32,
-    pub resilience:i32,
+    pub resilience: i32,
     pub number_of_mints: i32,
-    pub durability: i32
+    pub durability: i32,
 }
 
 pub fn store(storage: &mut dyn Storage) -> Bucket<Pen> {

@@ -9,9 +9,9 @@ pub struct InstantiateMsg {
     pub quality: String,
     pub level: i32,
     pub effect: i32,
-    pub resilience:i32,
+    pub resilience: i32,
     pub number_of_mints: i32,
-    pub durability: i32
+    pub durability: i32,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
@@ -23,9 +23,9 @@ pub enum ExecuteMsg {
         quality: String,
         level: i32,
         effect: i32,
-        resilience:i32,
+        resilience: i32,
         number_of_mints: i32,
-        durability: i32
+        durability: i32,
     },
     // Sell {
     //     id: String,

@@ -27,7 +27,7 @@ pub fn instantiate(
         effect: msg.effect,
         resilience: msg.resilience,
         number_of_mints: msg.number_of_mints,
-        durability: msg.durability
+        durability: msg.durability,
     };
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     let key = pen.id.as_bytes();
@@ -51,8 +51,18 @@ pub fn execute(
             effect,
             resilience,
             number_of_mints,
-            durability
-        } => mint(deps, id, owner, quality, level, effect, resilience, number_of_mints, durability),
+            durability,
+        } => mint(
+            deps,
+            id,
+            owner,
+            quality,
+            level,
+            effect,
+            resilience,
+            number_of_mints,
+            durability,
+        ),
         // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
@@ -61,12 +71,12 @@ pub fn mint(
     deps: DepsMut,
     id: String,
     owner: String,
-    quality: String, 
-    level:i32,
-    effect:i32, 
-    resilience:i32, 
-    number_of_mints:i32,
-    durability:i32
+    quality: String,
+    level: i32,
+    effect: i32,
+    resilience: i32,
+    number_of_mints: i32,
+    durability: i32,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
         id,
@@ -76,7 +86,7 @@ pub fn mint(
         effect,
         resilience,
         number_of_mints,
-        durability
+        durability,
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
