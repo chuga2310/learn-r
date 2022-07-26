@@ -3,10 +3,13 @@ use cosmwasm_std::entry_point;
 use cosmwasm_std::StdError;
 use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use cw2::set_contract_version;
+use schemars::_serde_json::to_string;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, PenInfoResponse, QueryMsg};
-use crate::state::{store, store_query, Pen};
+use crate::msg::{
+    ExecuteMsg, InstantiateMsg, MetadataMsg, MetadataPenResponse, PenInfoResponse, QueryMsg,
+};
+use crate::state::{store, store_query, ExtensionPen, Pen};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:learn-r";
@@ -20,14 +23,9 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
-        id: msg.id,
+        id: "-1".to_string(),
         owner: msg.owner,
-        quality: msg.quality,
-        level: msg.level,
-        effect: msg.effect,
-        resilience: msg.resilience,
-        number_of_mints: msg.number_of_mints,
-        durability: msg.durability,
+        extension: msg.extension,
     };
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     let key = pen.id.as_bytes();
@@ -46,23 +44,8 @@ pub fn execute(
         ExecuteMsg::Mint {
             id,
             owner,
-            quality,
-            level,
-            effect,
-            resilience,
-            number_of_mints,
-            durability,
-        } => mint(
-            deps,
-            id,
-            owner,
-            quality,
-            level,
-            effect,
-            resilience,
-            number_of_mints,
-            durability,
-        ),
+            extension,
+        } => mint(deps, id, owner, extension),
         // ExecuteMsg::Sell { id, amount } => sell(deps, id, amount),
     }
 }
@@ -71,22 +54,12 @@ pub fn mint(
     deps: DepsMut,
     id: String,
     owner: String,
-    quality: String,
-    level: i32,
-    effect: i32,
-    resilience: i32,
-    number_of_mints: i32,
-    durability: i32,
+    extension: ExtensionPen,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
         id,
         owner,
-        quality,
-        level,
-        effect,
-        resilience,
-        number_of_mints,
-        durability,
+        extension,
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
@@ -124,6 +97,13 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     }
 }
 
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn metadata(deps: Deps, _env: Env, msg: MetadataMsg) -> StdResult<String> {
+    match msg {
+        MetadataMsg::GetMetadata { id } => get_metadata(deps, _env, id),
+    }
+}
+
 fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
     let key = id.as_bytes();
     let pen = match store_query(deps.storage).may_load(key)? {
@@ -133,4 +113,19 @@ fn query_pen(deps: Deps, id: String) -> StdResult<Binary> {
 
     let resp = PenInfoResponse { pen };
     to_binary(&resp)
+}
+
+fn get_metadata(deps: Deps, _env: Env, id: String) -> StdResult<String> {
+    let key = id.as_bytes();
+    let pen = match store_query(deps.storage).may_load(key)? {
+        Some(pen) => Some(pen),
+        None => return Err(StdError::generic_err("Pen does not exist")),
+    };
+
+    let mut url = "http://learn.com/metadata/".to_owned();
+    let contract = _env.contract.address.to_string();
+    url.push_str(&contract);
+    url.push_str("/token/");
+    url.push_str(&pen.unwrap().id.to_string());
+    return Ok(url);
 }

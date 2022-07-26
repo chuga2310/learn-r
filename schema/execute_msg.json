@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ExecuteMsg",
-  "anyOf": [
+  "oneOf": [
     {
       "type": "object",
       "required": [
@@ -11,10 +11,14 @@
         "mint": {
           "type": "object",
           "required": [
+            "extension",
             "id",
             "owner"
           ],
           "properties": {
+            "extension": {
+              "$ref": "#/definitions/ExtensionPen"
+            },
             "id": {
               "type": "string"
             },
@@ -26,5 +30,43 @@
       },
       "additionalProperties": false
     }
-  ]
+  ],
+  "definitions": {
+    "ExtensionPen": {
+      "type": "object",
+      "required": [
+        "durability",
+        "effect",
+        "level",
+        "number_of_mints",
+        "quality",
+        "resilience"
+      ],
+      "properties": {
+        "durability": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "effect": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "number_of_mints": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quality": {
+          "type": "string"
+        },
+        "resilience": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
 }

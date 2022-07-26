@@ -10,6 +10,11 @@ static STORE_KEY: &[u8] = b"pen_storage";
 pub struct Pen {
     pub id: String,
     pub owner: String,
+    pub extension: ExtensionPen,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
+pub struct ExtensionPen {
     pub quality: String,
     pub level: i32,
     pub effect: i32,
