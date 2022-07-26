@@ -11,11 +11,11 @@ pub struct Pen {
     pub id: String,
     pub owner: String,
     pub quality: String,
-    pub level: Number,
-    pub effect: Number,
-    pub resilience:Number,
-    pub number_of_mints: Number,
-    pub durability: Number
+    pub level: i32,
+    pub effect: i32,
+    pub resilience:i32,
+    pub number_of_mints: i32,
+    pub durability: i32
 }
 
 pub fn store(storage: &mut dyn Storage) -> Bucket<Pen> {
