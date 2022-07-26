@@ -5,6 +5,7 @@ pub mod state;
 
 #[test]
 fn not_works_with_add_new_id_existed() {
+    use crate::state::Quality;
     use contract::execute;
     use cosmwasm_std::{
         coins,
@@ -13,17 +14,18 @@ fn not_works_with_add_new_id_existed() {
     use error::ContractError;
     use msg::ExecuteMsg;
     use state::ExtensionPen;
+    use std::str::FromStr;
     let mut deps = mock_dependencies_with_balance(&coins(2, "token"));
     let pen_id = "1234";
     let owner = "aura1csk4psx5gz0l7c9u65289pwecntpwk9vf0c2xv";
-    let quality = "uncommon";
+    let quality = "common";
     let level: i32 = 2;
     let effect: i32 = 5;
     let resilience: i32 = 6;
     let number_of_mints: i32 = 7;
     let durability: i32 = 7;
     let extension = ExtensionPen {
-        quality: quality.to_string(),
+        quality: Quality::from_str(quality).unwrap(),
         level: level,
         effect: effect,
         resilience: resilience,
@@ -33,7 +35,7 @@ fn not_works_with_add_new_id_existed() {
     let msg_asiatic = ExecuteMsg::Mint {
         id: pen_id.to_string(),
         owner: owner.to_string(),
-        extension,
+        extension: Some(extension),
     };
     let info = mock_info("creator", &coins(1000, "earth"));
     // we can just call .unwrap() to assert this was a success
@@ -42,7 +44,7 @@ fn not_works_with_add_new_id_existed() {
 
     let info = mock_info("creator", &coins(1000, "earth"));
     let extension = ExtensionPen {
-        quality: quality.to_string(),
+        quality: Quality::from_str(quality).unwrap(),
         level: level,
         effect: effect,
         resilience: resilience,
@@ -52,7 +54,7 @@ fn not_works_with_add_new_id_existed() {
     let msg_oriental = ExecuteMsg::Mint {
         id: pen_id.to_string(),
         owner: owner.to_string(),
-        extension,
+        extension: Some(extension),
     };
     let err = execute(deps.as_mut(), mock_env(), info, msg_oriental).unwrap_err();
     match err {
@@ -68,6 +70,9 @@ fn not_works_with_add_new_id_existed() {
 // fn works_with_add_new_and_sell() {
 //     use crate::contract::query;
 //     use cosmwasm_std::{from_binary, to_binary};
+//     use std::str::FromStr;
+
+//     use crate::state::Quality;
 
 //     use contract::execute;
 //     use cosmwasm_std::{

@@ -3,10 +3,9 @@ name = "learn-r"
 version = "0.1.0"
 authors = ["cuonglm22 <cuonglm22@fpt.com.vn>"]
 edition = "2018"
-
 exclude = [
   # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "./artifacts/contract.wasm",
+  "contract.wasm",
   "hash.txt",
 ]
 
@@ -36,7 +35,7 @@ library = []
 optimize = """docker run --rm -v "$(pwd)":/code \
   --mount type=volume,source="$(basename "$(pwd)")_cache",target=/code/target \
   --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry \
-  cosmwasm/rust-optimizer:0.10.9
+  cosmwasm/rust-optimizer:0.12.4
 """
 
 [dependencies]
@@ -47,6 +46,7 @@ cw2 = "0.11"
 schemars = "0.8"
 serde = { version = "1.0", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0" }
-
+rand = "0.8.5"
+getrandom = { version = "0.2", features = ["js"] }
 [dev-dependencies]
 cosmwasm-schema = { version = "1.0.0-beta" }

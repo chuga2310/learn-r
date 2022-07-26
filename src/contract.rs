@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::StdError;
@@ -6,7 +8,7 @@ use cw2::set_contract_version;
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, PenInfoResponse, QueryMsg};
-use crate::state::{store, store_query, ExtensionPen, Pen};
+use crate::state::{store, store_query, ExtensionPen, Pen, Quality};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:learn-r";
@@ -19,10 +21,18 @@ pub fn instantiate(
     _info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
+    let extension = ExtensionPen {
+        quality: Quality::from_str("common").unwrap(),
+        level: 1,
+        effect: 1,
+        resilience: 1,
+        number_of_mints: 1,
+        durability: 1,
+    };
     let pen = Pen {
         id: "-1".to_string(),
         owner: msg.owner,
-        extension: msg.extension,
+        extension,
     };
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     let key = pen.id.as_bytes();
@@ -51,12 +61,12 @@ pub fn mint(
     deps: DepsMut,
     id: String,
     owner: String,
-    extension: ExtensionPen,
+    extension: Option<ExtensionPen>,
 ) -> Result<Response, ContractError> {
     let pen = Pen {
         id,
         owner,
-        extension,
+        extension: extension.unwrap(),
     };
     let key = pen.id.as_bytes();
     if (store(deps.storage).may_load(key)?).is_some() {
