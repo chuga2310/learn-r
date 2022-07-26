@@ -47,13 +47,21 @@
           "format": "int32"
         },
         "quality": {
-          "type": "string"
+          "$ref": "#/definitions/Quality"
         },
         "resilience": {
           "type": "integer",
           "format": "int32"
         }
       }
+    },
+    "Quality": {
+      "type": "string",
+      "enum": [
+        "Rare",
+        "Common",
+        "Unique"
+      ]
     }
   }
 }

@@ -3,57 +3,11 @@
   "title": "InstantiateMsg",
   "type": "object",
   "required": [
-    "extension",
-    "id",
     "owner"
   ],
   "properties": {
-    "extension": {
-      "$ref": "#/definitions/ExtensionPen"
-    },
-    "id": {
-      "type": "string"
-    },
     "owner": {
       "type": "string"
-    }
-  },
-  "definitions": {
-    "ExtensionPen": {
-      "type": "object",
-      "required": [
-        "durability",
-        "effect",
-        "level",
-        "number_of_mints",
-        "quality",
-        "resilience"
-      ],
-      "properties": {
-        "durability": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "effect": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "level": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "number_of_mints": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "quality": {
-          "type": "string"
-        },
-        "resilience": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
     }
   }
 }
