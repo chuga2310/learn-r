@@ -122,7 +122,7 @@ fn get_metadata(deps: Deps, _env: Env, id: String) -> StdResult<Binary> {
     let contract = _env.contract.address.to_string();
     url.push_str(&contract);
     url.push_str("/token/");
-    url.push_str(&pen.unwrap().id.to_string());
+    url.push_str(&pen.unwrap().id);
 
     to_binary(&url)
 }
