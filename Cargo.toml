@@ -1,29 +1,21 @@
 [package]
-name = "learn-r"
-version = "0.1.0"
-authors = ["cuonglm22 <cuonglm22@fpt.com.vn>"]
+name = "pen-contract"
+version = "0.0.1"
+authors = [
+  "Cuong Manh Le <cuonglm22@fpt.com.vn>",
+]
 edition = "2018"
+license = "Apache-2.0"
+repository = "https://github.com/chuga2310/learn-r/"
+
 exclude = [
   # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "learn_r.wasm",
-  "hash.txt",
+  "artifacts/*",
 ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
 crate-type = ["cdylib", "rlib"]
-
-[profile.release]
-opt-level = 3
-debug = false
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
-panic = 'abort'
-incremental = false
-overflow-checks = true
 
 [features]
 # for more explicit tests, cargo test --features=backtraces
@@ -31,23 +23,15 @@ backtraces = ["cosmwasm-std/backtraces"]
 # use library feature to disable all instantiate/execute/query exports
 library = []
 
-[package.metadata.scripts]
-optimize = """docker run --rm -v "$(pwd)":/code \
-  --mount type=volume,source="$(basename "$(pwd)")_cache",target=/code/target \
-  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry \
-  cosmwasm/rust-optimizer:0.12.6
-"""
-
 [dependencies]
-cosmwasm-std = { version = "1.0.0-beta" }
-cosmwasm-storage = { version = "1.0.0-beta" }
-cw-storage-plus = "0.11.1"
-cw2 = "0.11.1"
-schemars = "0.8"
-serde = { version = "1.0.127", default-features = false, features = ["derive"] }
-thiserror = { version = "1.0.26" }
-rand = "0.8.5"
-getrandom = { version = "0.2", features = ["js"] }
+cw-utils = "0.13.4"
+cw2 = "0.13.4"
+cw721 = { path = "./packages/cw721", version = "0.13.4" }
+cw-storage-plus = "0.13.4"
+cosmwasm-std = { version = "1.0.0" }
+schemars = "0.8.10"
+serde = { version = "1.0.140", default-features = false, features = ["derive"] }
+thiserror = { version = "1.0.31" }
 
 [dev-dependencies]
-cosmwasm-schema = { version = "1.0.0-beta" }
+cosmwasm-schema = { version = "1.0.0" }
