@@ -17,11 +17,7 @@ fn main() {
     remove_schemas(&out_dir).unwrap();
 
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
-    export_schema_with_title(
-        &schema_for!(ExecuteMsg<Extension, Empty>),
-        &out_dir,
-        "ExecuteMsg",
-    );
+    export_schema_with_title(&schema_for!(ExecuteMsg<Extension>), &out_dir, "ExecuteMsg");
     export_schema_with_title(&schema_for!(QueryMsg<Empty>), &out_dir, "QueryMsg");
     export_schema_with_title(
         &schema_for!(AllNftInfoResponse<Extension>),

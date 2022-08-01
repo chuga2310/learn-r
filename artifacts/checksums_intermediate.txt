@@ -1,3 +1,1 @@
-3cb1919bbe9e3502550fdccf6ddbd13a1bf501e94b60c178cee96fe1ff1f06aa  ./target/wasm32-unknown-unknown/release/cw721_base.wasm
-4e94eb7c7b5b46a4b81d6e5fc40374a10fa0eeb48252811c50dc0b37d5dd2dfe  ./target/wasm32-unknown-unknown/release/learn_r.wasm
-1d029a84f15922dcfadc50a3d9722808e6fadc3da77e5f31402bfe614180d638  ./target/wasm32-unknown-unknown/release/pen_contract.wasm
+c9afe40fa21d4f0a3db5956e352e209e91fe2dc1f52dc6a7a07d6db6f94949a2  ./target/wasm32-unknown-unknown/release/pen_contract.wasm
