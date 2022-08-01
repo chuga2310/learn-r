@@ -22,7 +22,7 @@ fn main() {
         &out_dir,
         "ExecuteMsg",
     );
-    export_schema(&schema_for!(QueryMsg<Empty>), &out_dir);
+    export_schema_with_title(&schema_for!(QueryMsg<Empty>), &out_dir, "QueryMsg");
     export_schema_with_title(
         &schema_for!(AllNftInfoResponse<Extension>),
         &out_dir,
