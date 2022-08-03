@@ -1,6 +1,3 @@
-use serde::de::DeserializeOwned;
-use serde::Serialize;
-
 use cosmwasm_std::{to_binary, Addr, Binary, BlockInfo, Deps, Env, Order, StdError, StdResult};
 
 use cw721::{
@@ -17,9 +14,8 @@ use crate::state::{Approval, Cw721Contract, PenTokenInfo};
 const DEFAULT_LIMIT: u32 = 10;
 const MAX_LIMIT: u32 = 100;
 
-impl<'a, T, C, E, Q> Cw721Query<T> for Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Query for Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -33,7 +29,7 @@ where
         Ok(NumTokensResponse { count })
     }
 
-    fn nft_info(&self, deps: Deps, token_id: String) -> StdResult<NftInfoResponse<T>> {
+    fn nft_info(&self, deps: Deps, token_id: String) -> StdResult<NftInfoResponse> {
         let info = self.tokens.load(deps.storage, &token_id)?;
         Ok(NftInfoResponse {
             token_uri: info.token_uri,
@@ -192,7 +188,7 @@ where
         env: Env,
         token_id: String,
         include_expired: bool,
-    ) -> StdResult<AllNftInfoResponse<T>> {
+    ) -> StdResult<AllNftInfoResponse> {
         let info = self.tokens.load(deps.storage, &token_id)?;
         Ok(AllNftInfoResponse {
             access: OwnerOfResponse {
@@ -207,9 +203,8 @@ where
     }
 }
 
-impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -292,9 +287,9 @@ fn parse_approval(item: StdResult<(Addr, Expiration)>) -> StdResult<cw721::Appro
     })
 }
 
-fn humanize_approvals<T>(
+fn humanize_approvals(
     block: &BlockInfo,
-    info: &PenTokenInfo<T>,
+    info: &PenTokenInfo,
     include_expired: bool,
 ) -> Vec<cw721::Approval> {
     info.approvals

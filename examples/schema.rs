@@ -8,7 +8,7 @@ use cw721::{
     AllNftInfoResponse, ApprovalResponse, ApprovalsResponse, ContractInfoResponse, NftInfoResponse,
     NumTokensResponse, OperatorsResponse, OwnerOfResponse, TokensResponse,
 };
-use pen_contract::{ExecuteMsg, Extension, InstantiateMsg, MinterResponse, QueryMsg};
+use pen_contract::{ExecuteMsg, InstantiateMsg, MinterResponse, QueryMsg};
 
 fn main() {
     let mut out_dir = current_dir().unwrap();
@@ -17,10 +17,10 @@ fn main() {
     remove_schemas(&out_dir).unwrap();
 
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
-    export_schema_with_title(&schema_for!(ExecuteMsg<Extension>), &out_dir, "ExecuteMsg");
+    export_schema_with_title(&schema_for!(ExecuteMsg), &out_dir, "ExecuteMsg");
     export_schema_with_title(&schema_for!(QueryMsg<Empty>), &out_dir, "QueryMsg");
     export_schema_with_title(
-        &schema_for!(AllNftInfoResponse<Extension>),
+        &schema_for!(AllNftInfoResponse),
         &out_dir,
         "AllNftInfoResponse",
     );
@@ -29,11 +29,7 @@ fn main() {
     export_schema(&schema_for!(OperatorsResponse), &out_dir);
     export_schema(&schema_for!(ContractInfoResponse), &out_dir);
     export_schema(&schema_for!(MinterResponse), &out_dir);
-    export_schema_with_title(
-        &schema_for!(NftInfoResponse<Extension>),
-        &out_dir,
-        "NftInfoResponse",
-    );
+    export_schema_with_title(&schema_for!(NftInfoResponse), &out_dir, "NftInfoResponse");
     export_schema(&schema_for!(NumTokensResponse), &out_dir);
     export_schema(&schema_for!(OwnerOfResponse), &out_dir);
     export_schema(&schema_for!(TokensResponse), &out_dir);

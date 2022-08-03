@@ -23,7 +23,7 @@ impl<Q: CustomMsg, E: CustomMsg> Cw721Contract<Q, E> {
         self.0.clone()
     }
 
-    pub fn call<T: Serialize>(&self, msg: ExecuteMsg<T>) -> StdResult<CosmosMsg> {
+    pub fn call<T: Serialize>(&self, msg: ExecuteMsg) -> StdResult<CosmosMsg> {
         let msg = to_binary(&msg)?;
         Ok(WasmMsg::Execute {
             contract_addr: self.addr().into(),
@@ -126,7 +126,7 @@ impl<Q: CustomMsg, E: CustomMsg> Cw721Contract<Q, E> {
         &self,
         querier: &QuerierWrapper,
         token_id: T,
-    ) -> StdResult<NftInfoResponse<U>> {
+    ) -> StdResult<NftInfoResponse> {
         let req = QueryMsg::NftInfo {
             token_id: token_id.into(),
         };
@@ -139,7 +139,7 @@ impl<Q: CustomMsg, E: CustomMsg> Cw721Contract<Q, E> {
         querier: &QuerierWrapper,
         token_id: T,
         include_expired: bool,
-    ) -> StdResult<AllNftInfoResponse<U>> {
+    ) -> StdResult<AllNftInfoResponse> {
         let req = QueryMsg::AllNftInfo {
             token_id: token_id.into(),
             include_expired: Some(include_expired),

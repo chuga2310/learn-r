@@ -1,1 +1,1 @@
-c9afe40fa21d4f0a3db5956e352e209e91fe2dc1f52dc6a7a07d6db6f94949a2  ./target/wasm32-unknown-unknown/release/pen_contract.wasm
+1dd7de8c713960d6faad38f2afa2965e5b61d1d8a24468adbc8dc631bc2083bc  ./target/wasm32-unknown-unknown/release/pen_contract.wasm

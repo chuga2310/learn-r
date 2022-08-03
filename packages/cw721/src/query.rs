@@ -114,21 +114,21 @@ pub struct ContractInfoResponse {
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
-pub struct NftInfoResponse<T> {
+pub struct NftInfoResponse {
     /// Universal resource identifier for this NFT
     /// Should point to a JSON file that conforms to the ERC721
     /// Metadata JSON Schema
     pub token_uri: Option<String>,
     /// You can add any custom metadata here when you extend cw721-base
-    pub extension: T,
+    pub extension: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
-pub struct AllNftInfoResponse<T> {
+pub struct AllNftInfoResponse {
     /// Who can transfer the token
     pub access: OwnerOfResponse,
     /// Data on the token itself,
-    pub info: NftInfoResponse<T>,
+    pub info: NftInfoResponse,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]

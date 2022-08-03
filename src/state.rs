@@ -1,5 +1,4 @@
 use schemars::JsonSchema;
-use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
@@ -8,9 +7,8 @@ use cosmwasm_std::{Addr, BlockInfo, StdResult, Storage};
 use cw721::{ContractInfoResponse, CustomMsg, Cw721, Expiration};
 use cw_storage_plus::{Index, IndexList, IndexedMap, Item, Map, MultiIndex};
 
-pub struct Cw721Contract<'a, T, C, E, Q>
+pub struct Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     Q: CustomMsg,
     E: CustomMsg,
 {
@@ -19,7 +17,7 @@ where
     pub token_count: Item<'a, u64>,
     /// Stored as (granter, operator) giving operator full control over granter's account
     pub operators: Map<'a, (&'a Addr, &'a Addr), Expiration>,
-    pub tokens: IndexedMap<'a, &'a str, PenTokenInfo<T>, TokenIndexes<'a, T>>,
+    pub tokens: IndexedMap<'a, &'a str, PenTokenInfo, TokenIndexes<'a>>,
 
     pub(crate) _custom_response: PhantomData<C>,
     pub(crate) _custom_query: PhantomData<Q>,
@@ -27,18 +25,16 @@ where
 }
 
 // This is a signal, the implementations are in other files
-impl<'a, T, C, E, Q> Cw721<T, C> for Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721<C> for Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
 {
 }
 
-impl<T, C, E, Q> Default for Cw721Contract<'static, T, C, E, Q>
+impl<C, E, Q> Default for Cw721Contract<'static, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     E: CustomMsg,
     Q: CustomMsg,
 {
@@ -54,9 +50,8 @@ where
     }
 }
 
-impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     E: CustomMsg,
     Q: CustomMsg,
 {
@@ -101,7 +96,7 @@ where
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct PenTokenInfo<T> {
+pub struct PenTokenInfo {
     /// The owner of the newly minted NFT
     pub owner: Addr,
     /// Approvals are stored here, as we clear them all upon transfer and cannot accumulate much
@@ -113,7 +108,7 @@ pub struct PenTokenInfo<T> {
     pub token_uri: Option<String>,
 
     /// You can add any custom metadata here when you extend cw721-base
-    pub extension: T,
+    pub extension: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
@@ -130,23 +125,17 @@ impl Approval {
     }
 }
 
-pub struct TokenIndexes<'a, T>
-where
-    T: Serialize + DeserializeOwned + Clone,
-{
-    pub owner: MultiIndex<'a, Addr, PenTokenInfo<T>, String>,
+pub struct TokenIndexes<'a> {
+    pub owner: MultiIndex<'a, Addr, PenTokenInfo, String>,
 }
 
-impl<'a, T> IndexList<PenTokenInfo<T>> for TokenIndexes<'a, T>
-where
-    T: Serialize + DeserializeOwned + Clone,
-{
-    fn get_indexes(&'_ self) -> Box<dyn Iterator<Item = &'_ dyn Index<PenTokenInfo<T>>> + '_> {
-        let v: Vec<&dyn Index<PenTokenInfo<T>>> = vec![&self.owner];
+impl<'a> IndexList<PenTokenInfo> for TokenIndexes<'a> {
+    fn get_indexes(&'_ self) -> Box<dyn Iterator<Item = &'_ dyn Index<PenTokenInfo>> + '_> {
+        let v: Vec<&dyn Index<PenTokenInfo>> = vec![&self.owner];
         Box::new(v.into_iter())
     }
 }
 
-pub fn token_owner_idx<T>(d: &PenTokenInfo<T>) -> Addr {
+pub fn token_owner_idx(d: &PenTokenInfo) -> Addr {
     d.owner.clone()
 }

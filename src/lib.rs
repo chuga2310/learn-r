@@ -12,7 +12,7 @@ pub use crate::state::Cw721Contract;
 use cosmwasm_std::Empty;
 
 // This is a simple type to let us handle empty extensions
-pub type Extension = Option<Empty>;
+pub type Extension = Option<String>;
 
 pub mod entry {
     use super::*;
@@ -29,7 +29,7 @@ pub mod entry {
         info: MessageInfo,
         msg: InstantiateMsg,
     ) -> StdResult<Response> {
-        let tract = Cw721Contract::<Extension, Empty, Empty, Empty>::default();
+        let tract = Cw721Contract::<Empty, Empty, Empty>::default();
         tract.instantiate(deps, env, info, msg)
     }
 
@@ -38,15 +38,15 @@ pub mod entry {
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        msg: ExecuteMsg<Extension>,
+        msg: ExecuteMsg,
     ) -> Result<Response, ContractError> {
-        let tract = Cw721Contract::<Extension, Empty, Empty, Empty>::default();
+        let tract = Cw721Contract::<Empty, Empty, Empty>::default();
         tract.execute(deps, env, info, msg)
     }
 
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn query(deps: Deps, env: Env, msg: QueryMsg<Empty>) -> StdResult<Binary> {
-        let tract = Cw721Contract::<Extension, Empty, Empty, Empty>::default();
+        let tract = Cw721Contract::<Empty, Empty, Empty>::default();
         tract.query(deps, env, msg)
     }
 }

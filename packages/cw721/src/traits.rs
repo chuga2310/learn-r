@@ -1,6 +1,4 @@
 use schemars::JsonSchema;
-use serde::de::DeserializeOwned;
-use serde::Serialize;
 
 use crate::query::ApprovalResponse;
 use crate::{
@@ -15,16 +13,14 @@ pub trait CustomMsg: Clone + std::fmt::Debug + PartialEq + JsonSchema {}
 
 impl CustomMsg for Empty {}
 
-pub trait Cw721<T, C>: Cw721Execute<T, C> + Cw721Query<T>
+pub trait Cw721<C>: Cw721Execute<C> + Cw721Query
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
 {
 }
 
-pub trait Cw721Execute<T, C>
+pub trait Cw721Execute<C>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
 {
     type Err: ToString;
@@ -93,10 +89,7 @@ where
     ) -> Result<Response<C>, Self::Err>;
 }
 
-pub trait Cw721Query<T>
-where
-    T: Serialize + DeserializeOwned + Clone,
-{
+pub trait Cw721Query {
     // TODO: use custom error?
     // How to handle the two derived error types?
 
@@ -104,7 +97,7 @@ where
 
     fn num_tokens(&self, deps: Deps) -> StdResult<NumTokensResponse>;
 
-    fn nft_info(&self, deps: Deps, token_id: String) -> StdResult<NftInfoResponse<T>>;
+    fn nft_info(&self, deps: Deps, token_id: String) -> StdResult<NftInfoResponse>;
 
     fn owner_of(
         &self,
@@ -162,5 +155,5 @@ where
         env: Env,
         token_id: String,
         include_expired: bool,
-    ) -> StdResult<AllNftInfoResponse<T>>;
+    ) -> StdResult<AllNftInfoResponse>;
 }

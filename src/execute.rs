@@ -1,6 +1,3 @@
-use serde::de::DeserializeOwned;
-use serde::Serialize;
-
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 
 use cw2::set_contract_version;
@@ -14,9 +11,8 @@ use crate::state::{Approval, Cw721Contract, PenTokenInfo};
 const CONTRACT_NAME: &str = "crates.io:cw721-base";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
-impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -45,7 +41,7 @@ where
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        msg: ExecuteMsg<T>,
+        msg: ExecuteMsg,
     ) -> Result<Response<C>, ContractError> {
         match msg {
             ExecuteMsg::Mint(msg) => self.mint(deps, env, info, msg),
@@ -77,9 +73,8 @@ where
 }
 
 // TODO pull this into some sort of trait extension??
-impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -89,7 +84,7 @@ where
         deps: DepsMut,
         _env: Env,
         info: MessageInfo,
-        msg: MintMsg<T>,
+        msg: MintMsg,
     ) -> Result<Response<C>, ContractError> {
         let minter = self.minter.load(deps.storage)?;
 
@@ -120,9 +115,8 @@ where
     }
 }
 
-impl<'a, T, C, E, Q> Cw721Execute<T, C> for Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Execute<C> for Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -271,9 +265,8 @@ where
 }
 
 // helpers
-impl<'a, T, C, E, Q> Cw721Contract<'a, T, C, E, Q>
+impl<'a, C, E, Q> Cw721Contract<'a, C, E, Q>
 where
-    T: Serialize + DeserializeOwned + Clone,
     C: CustomMsg,
     E: CustomMsg,
     Q: CustomMsg,
@@ -285,7 +278,7 @@ where
         info: &MessageInfo,
         recipient: &str,
         token_id: &str,
-    ) -> Result<PenTokenInfo<T>, ContractError> {
+    ) -> Result<PenTokenInfo, ContractError> {
         let mut token = self.tokens.load(deps.storage, token_id)?;
         // ensure we have permissions
         self.check_can_send(deps.as_ref(), env, info, &token)?;
@@ -307,7 +300,7 @@ where
         // if add == false, remove. if add == true, remove then set with this expiration
         add: bool,
         expires: Option<Expiration>,
-    ) -> Result<PenTokenInfo<T>, ContractError> {
+    ) -> Result<PenTokenInfo, ContractError> {
         let mut token = self.tokens.load(deps.storage, token_id)?;
         // ensure we have permissions
         self.check_can_approve(deps.as_ref(), env, info, &token)?;
@@ -345,7 +338,7 @@ where
         deps: Deps,
         env: &Env,
         info: &MessageInfo,
-        token: &PenTokenInfo<T>,
+        token: &PenTokenInfo,
     ) -> Result<(), ContractError> {
         // owner can approve
         if token.owner == info.sender {
@@ -373,7 +366,7 @@ where
         deps: Deps,
         env: &Env,
         info: &MessageInfo,
-        token: &PenTokenInfo<T>,
+        token: &PenTokenInfo,
     ) -> Result<(), ContractError> {
         // owner can send
         if token.owner == info.sender {
