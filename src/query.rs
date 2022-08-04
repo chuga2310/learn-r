@@ -3,7 +3,7 @@ use cosmwasm_std::{to_binary, Addr, Binary, BlockInfo, Deps, Env, Order, StdErro
 use cw721::{
     AllNftInfoResponse, ApprovalResponse, ApprovalsResponse, ContractInfoResponse, CustomMsg,
     Cw721Query, Expiration, NftInfoResponse, NumTokensResponse, OperatorsResponse, OwnerOfResponse,
-    TokensResponse,
+    TokensResponse, TokensWithInfoResponse, NftInfoResponseWithId
 };
 use cw_storage_plus::Bound;
 use cw_utils::maybe_addr;
@@ -146,21 +146,28 @@ where
         owner: String,
         start_after: Option<String>,
         limit: Option<u32>,
-    ) -> StdResult<TokensResponse> {
+    ) -> StdResult<TokensWithInfoResponse> {
         let limit = limit.unwrap_or(DEFAULT_LIMIT).min(MAX_LIMIT) as usize;
         let start = start_after.map(|s| Bound::ExclusiveRaw(s.into()));
 
         let owner_addr = deps.api.addr_validate(&owner)?;
-        let tokens: Vec<String> = self
+        let tokens: Vec<NftInfoResponseWithId> = self
             .tokens
             .idx
             .owner
             .prefix(owner_addr)
             .keys(deps.storage, start, None, Order::Ascending)
             .take(limit)
-            .collect::<StdResult<Vec<_>>>()?;
-
-        Ok(TokensResponse { tokens })
+            .map(|t| -> cw721::NftInfoResponseWithId {
+                let token_id: &str = &*t.unwrap();
+                return cw721::NftInfoResponseWithId {
+                    token_id: token_id.to_owned(),
+                    token_uri: self.tokens.load(deps.storage,&*token_id).unwrap().token_uri,
+                    extension: self.tokens.load(deps.storage,&token_id).unwrap().token_uri,
+                }
+            } )
+            .collect();
+        Ok(TokensWithInfoResponse { tokens })
     }
 
     fn all_tokens(

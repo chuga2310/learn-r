@@ -1,6 +1,6 @@
 use schemars::JsonSchema;
 
-use crate::query::ApprovalResponse;
+use crate::query::{ApprovalResponse, TokensWithInfoResponse};
 use crate::{
     AllNftInfoResponse, ApprovalsResponse, ContractInfoResponse, NftInfoResponse,
     NumTokensResponse, OperatorsResponse, OwnerOfResponse, TokensResponse,
@@ -140,7 +140,7 @@ pub trait Cw721Query {
         owner: String,
         start_after: Option<String>,
         limit: Option<u32>,
-    ) -> StdResult<TokensResponse>;
+    ) -> StdResult<TokensWithInfoResponse>;
 
     fn all_tokens(
         &self,
