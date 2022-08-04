@@ -1,1 +1,1 @@
-cacf80a36b716eb3dce823d42484e2eee36b1b840a38828f288710bfa3e9aab2  pen_contract.wasm
+eb9b46c36da0a75e39db09613e2c020a8f6d565e122e926f8254c439adbc637c  pen_contract.wasm

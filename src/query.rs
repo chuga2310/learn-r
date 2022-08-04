@@ -160,10 +160,11 @@ where
             .take(limit)
             .map(|t| -> cw721::NftInfoResponseWithId {
                 let token_id: &str = &*t.unwrap();
+                let info = self.tokens.load(deps.storage, &token_id).unwrap();
                 return cw721::NftInfoResponseWithId {
                     token_id: token_id.to_owned(),
-                    token_uri: self.tokens.load(deps.storage,&*token_id).unwrap().token_uri,
-                    extension: self.tokens.load(deps.storage,&token_id).unwrap().token_uri,
+                    token_uri:  info.token_uri,
+                    extension:info.extension,
                 }
             } )
             .collect();
